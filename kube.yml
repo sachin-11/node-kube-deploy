@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-kube-deploy
+spec:
+  selector:
+    matchLabels:
+      app: node-kube-deploy
+  template:
+    metadata:
+      labels:
+        app: node-kube-deploy
+    spec:
+      containers:
+        - name: node-kube-deploy
+          image: sachin/helloworld
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 80
+          imagePullPolicy: Never
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-kube-deploy
+spec:
+  selector:
+    app: node-kube-deploy
+  ports:
+    - port: 80
+      targetPort: 80
+  type: LoadBalancer
